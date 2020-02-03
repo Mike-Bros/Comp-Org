@@ -15,7 +15,8 @@ main:
 	syscall		# input is read and stored back into $v0
 	move $s0, $v0	# move the input to a saved register
 	
-	j myLoop
+	bgtz $s0, myLoop
+	j exit
 
 myLoop:
 	li $v0,4	 # display the loop text
