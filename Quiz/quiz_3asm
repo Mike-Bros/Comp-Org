@@ -1,0 +1,30 @@
+.data
+newLine: .asciiz "\n"
+
+.text
+main:
+	li $s0,0
+	j myLoop
+
+myLoop:	
+	li $t0,5 
+	#print i
+	li $v0, 1
+	addi $a0,$s0,0	# copy i to $a0 	
+	syscall		# display value of i
+	
+	#print newline
+	li $v0,4
+	la $a0, newLine
+	syscall
+	
+	#increment i
+	addi $s0,$s0,1
+	
+	#if i<5 repeat, else exit
+	bne $s0,$t0,myLoop
+	j exit
+
+exit:
+	li $v0,10
+	syscall
