@@ -1,7 +1,7 @@
-#Homework 5-1 Michael Bros
+#Homework 5 Michael Bros
 
 .data
-prompt1:	.asciiz"Please enter an Integer for terms to be added to Fibonacci Series(-1 to exit): "
+prompt1:	.asciiz"Please enter an Integer for terms to be added to Fibonacci Series(-1 to exit and 45 terms max): "
 msg1:	.asciiz "\nFibonacci Series: "
 msg2:	.asciiz "\nThe sum of the Fibonacci sequence is: "
 error:	.asciiz "Please enter an integer greater than 1\n"
@@ -11,7 +11,7 @@ newLine:	.asciiz "\n"
 
 prompt:	.asciiz "Input 0 for Fib Program or 1 for Square Program: "
 
-inputmsg: .asciiz "Please enter a number less than 46341\n"
+inputmsg: .asciiz "Please enter a number less than 46341 (0 to exit): \n"
 output: .asciiz "Square of that is: "
 
 .text
@@ -25,7 +25,7 @@ main:
 	
 	beqz $v0, fib
 	bnez $v0, Sqr
-	j main
+	
 Sqr:
 	li $t0 46341
 
@@ -37,21 +37,30 @@ getIn:
       
       li $v0 5	
       syscall
+      
+      beqz $v0, Exit
+      
 #if greater than 46341 branch back to getln
-	slt $t1, $a0, $t0
+	slt $t1, $v0, $t0
 	beqz $t1, getIn
-
+	
+	move $a0, $v0	#put number into a0 for function
 	jal getSq
+	move $s0,$v0
 #output message
 	li $v0 4
       la $a0 output
       syscall
 #print output value
-	addi $a0, $v0, 0
-	li $v0 5
+	move $a0, $s0	#put result into a0 to print
+	li $v0 1
 	syscall
+#newline	
+	li $v0 4
+      la $a0 newLine
+      syscall
 
-j Exit
+j getIn
 
 getSq:#totally flawless function! Make sure you use it! Also don’t edit it
 	mult $a0 $a0
