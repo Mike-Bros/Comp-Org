@@ -9,8 +9,56 @@ comma:	.asciiz ", "
 space:	.asciiz " "
 newLine:	.asciiz "\n"
 
+prompt:	.asciiz "Input 0 for Fib Program or 1 for Square Program: "
+
+inputmsg: .asciiz "Please enter a number less than 46341\n"
+output: .asciiz "Square of that is: "
+
 .text
 main:
+	li $v0, 4	#print prompt
+	la $a0, prompt
+	syscall
+	
+	li $v0, 5	#get user choice
+	syscall
+	
+	beqz $v0, fib
+	bnez $v0, Sqr
+	j main
+Sqr:
+	li $t0 46341
+
+getIn:
+#takes input from the user
+      li $v0 4
+      la $a0 inputmsg
+      syscall
+      
+      li $v0 5	
+      syscall
+#if greater than 46341 branch back to getln
+	slt $t1, $a0, $t0
+	beqz $t1, getIn
+
+	jal getSq
+#output message
+	li $v0 4
+      la $a0 output
+      syscall
+#print output value
+	addi $a0, $v0, 0
+	li $v0 5
+	syscall
+
+j Exit
+
+getSq:#totally flawless function! Make sure you use it! Also don’t edit it
+	mult $a0 $a0
+	mflo $v0
+	jr $ra
+
+fib:
 	li $s1, 0	#term 1
 	li $s2, 1	#term 2
 	li $s3, 0	#next term
@@ -90,13 +138,13 @@ Sum:
 	la $a0, newLine
 	syscall
 	syscall
-	j main
+	j fib
 Error:
 	li $v0, 4	#print error
 	la $a0, error
 	syscall
 	
-	j main
+	j fib
 Exit:	
 	li $v0, 10
 	syscall
