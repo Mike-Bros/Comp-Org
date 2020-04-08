@@ -1,40 +1,46 @@
-#Homework 6-1 Michael Bros
+#Homework 7 Michael Bros
 
 .data
-prompt:	.asciiz "Please enter an integer greater than 1: "
-comma:	.asciiz ", "
+prompt1:	.asciiz "Transaction Amount($): "
+prompt2:	.asciiz "Cash($): "
+disp:	.asciiz "Cash dispensed($"
+disp2:	.asciiz "):\n"
+
+notes:	.asciiz "Notes:\n"
+n50:	.asciiz "x $50\n"
+n20:	.asciiz "x $20\n"
+n10:	.asciiz "x $10\n"
+n5:	.asciiz "x $5\n"
+n1:	.asciiz "x $1\n"
+
+coins:	.asciiz "Coins:\n"
+c25:	.asciiz "x Quarter\n"
+c10:	.asciiz "x Dime\n"
+c5:	.asciiz "x Nickel\n"
+c1:	.asciiz "x Penny\n"
+
 newLine:	.asciiz "\n"
 
 .text
 main:
-	li $v0, 4	#print prompt
+	li $v0, 4	#Transaction amount in $s0
 	la $a0, prompt
 	syscall
 	
-	li $v0, 5	#get user input put into $s0
+	li $v0, 5	
 	syscall
 	move $s0,$v0
 	
-	li $t1, 1	#init 1 for comparison and counter
-	
-	beqz $t0, While
-	
-	j While	
-While:
-	addi $s1, $s0, 1	#add one to input
-	slt $t0, $t1, $s1	#check counter < input+1
-	beqz $t0, Exit		#if true exit
-	
-	li $v0, 1	#print counter
-	add $a0, $t1, $0
+	li $v0, 4	#Cash amount in $s1
+	la $a0, prompt
 	syscall
 	
-	li $v0, 4	#print comma
-	la $a0, comma
+	li $v0, 5	
 	syscall
+	move $s1,$v0
 	
-	addi $t1, $t1, 1	#increment counter
-	j While
+	
+
 
 Exit:	
 	li $v0, 10
